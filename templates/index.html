@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>COSMARYHTM</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background: #000;
+    color: #d8b2ff;
+    text-align: center;
+}
+
+h1 { margin-bottom: 20px; }
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input, button {
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #9b59b6;
+    background: #1a0a2b;
+    color: #d8b2ff;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background: #330066;
+}
+
+#results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    flex: 1 1 200px;
+    background: #1a0a2b;
+    border: 2px solid #9b59b6; /* thick purple border */
+    border-radius: 0;           /* perfect rectangle */
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card h2, .card p {
+    margin: 5px 0;
+    color: #d8b2ff;
+}
+
+#infoPanel { display:none; margin-top:30px; max-width:600px; margin-left:auto; margin-right:auto; text-align:left; background:#1a0a2b; color:#d8b2ff; padding:20px; border:2px solid #9b59b6; border-radius:0; }
+#infoPanel button { margin-bottom: 10px; }
+
+#suggestions { border: 1px solid #9b59b6; max-width: 300px; padding: 0; margin: 0 auto; list-style: none; position: absolute; background: #1a0a2b; z-index: 1000; text-align: left; color:#d8b2ff;}
+#suggestions li { padding: 5px; cursor: pointer; }
+#suggestions li:hover { background: #330066; }
+
+</style>
+</head>
+<body>
+<h1>Cosmic Algorithm</h1>
+
+<form id="astroForm">
+  <div style="position: relative; display:inline-block;">
+    <input type="text" id="city" placeholder="City, Country" autocomplete="off" required>
+    <ul id="suggestions"></ul>
+  </div>
+  <input type="text" id="date" placeholder="Birth Date" required>
+  <input type="text" id="time" placeholder="Birth Time" required>
+  <button type="submit">Enter Cosmos!</button>
+</form>
+
+<div id="results"></div>
+
+<div id="infoPanel">
+  <button id="backBtn">← Back</button>
+  <h2 id="infoTitle"></h2>
+  <p id="infoText"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+flatpickr("#date", { dateFormat: "Y-m-d", minDate:"1900-01-01", maxDate:"2100-12-31", allowInput:true });
+flatpickr("#time", { enableTime:true, noCalendar:true, dateFormat:"H:i", time_24hr:true });
+
+// City autocomplete
+const cityInput = document.getElementById("city");
+const suggestions = document.getElementById("suggestions");
+cityInput.addEventListener("input", async () => {
+  const q = cityInput.value;
+  if(q.length<2) return;
+  const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&addressdetails=1&limit=5`);
+  const data = await res.json();
+  suggestions.innerHTML="";
+  data.forEach(place=>{
+    const li=document.createElement("li");
+    li.textContent=place.display_name;
+    li.onclick=()=>{cityInput.value=place.display_name;suggestions.innerHTML="";};
+    suggestions.appendChild(li);
+  });
+});
+
+// Interpretations
+const infoText = {
+  sun: "Sun: core identity, house shows life area of expression.",
+  moon: "Moon: emotions, instincts, house shows where you feel secure.",
+  mercury: "Mercury: communication, thought patterns, house shows where you analyze.",
+  venus: "Venus: love, values, aesthetics, house shows relationship focus.",
+  mars: "Mars: energy, drive, house shows where you assert yourself.",
+  jupiter: "Jupiter: expansion, growth, house shows area of luck.",
+  saturn: "Saturn: discipline, restriction, house shows where challenges occur.",
+  uranus: "Uranus: innovation, sudden change, house shows unconventionality.",
+  neptune: "Neptune: imagination, spirituality, house shows dreams.",
+  pluto: "Pluto: transformation, power, house shows deep change.",
+  chiron: "Chiron: wounds and healing, house shows healing focus.",
+  part_of_fortune: "Part of Fortune: area of luck, prosperity, and happiness. House shows where you find opportunities.",
+  juno: "Juno: partnerships, marriage, house shows relationship area.",
+  regulus: "Regulus: fixed star, ambition, house shows life area of impact.",
+  rising: "Rising: outward personality, always house 1."
+};
+
+// Show info panel
+function showInfo(key){
+    document.getElementById("results").style.display="none";
+    document.getElementById("infoPanel").style.display="block";
+    document.getElementById("infoTitle").innerText=key.charAt(0).toUpperCase()+key.slice(1);
+    document.getElementById("infoText").innerText=infoText[key] || "";
+}
+
+// Back button
+document.getElementById("backBtn").onclick=()=>{
+    document.getElementById("infoPanel").style.display="none";
+    document.getElementById("results").style.display="flex";
+};
+
+// Form submission
+document.getElementById("astroForm").onsubmit=async e=>{
+  e.preventDefault();
+  const date=document.getElementById("date").value;
+  const time=document.getElementById("time").value;
+  const city=document.getElementById("city").value;
+
+  const res=await fetch("/chart", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({date,time,city})
+  });
+  const data=await res.json();
+
+  const resultsDiv=document.getElementById("results");
+  resultsDiv.innerHTML="";
+  resultsDiv.style.display="flex";
+
+  const bodies=["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto","chiron","part_of_fortune","regulus","juno","rising"];
+
+  bodies.forEach(key=>{
+    if(!data[key]) return;
+    const obj=data[key];
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<h2>${key.charAt(0).toUpperCase()+key.slice(1)}</h2>
+                    <p>Sign: ${obj.sign}</p>
+                    <p>Degree: ${obj.degree}°</p>
+                    <p>House: ${obj.house}</p>`;
+    card.onclick=()=>showInfo(key);
+    resultsDiv.appendChild(card);
+  });
+};
+</script>
+</body>
+</html>
