@@ -13,18 +13,14 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable
 
-app = Flask(__name__)
 
 #dynamic path for vercel
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 EPHE_PATH = os.path.join(BASE_DIR, 'ephe')
 
-#ephemeris path
-swe.set_ephe_path(EPHE_PATH)
+os.environ['SE_EPHE_PATH'] = EPHE_PATH
 
-print(f"DEBUG: BASE_DIR is {BASE_DIR}")
-print(f"DEBUG: Checking EPHE_PATH: {EPHE_PATH}")
-print(f"DEBUG: Does path exist? {os.path.exists(EPHE_PATH)}")
+app = Flask(__name__)
 
 def load_json(filename):
     full_path = os.path.join(BASE_DIR, filename)
@@ -80,6 +76,9 @@ def get_element_analysis(chart_data):
     return {k: round((v / total) * 100) for k, v in counts.items()}
 
 def calculate_chart(date_str, time_str, city_name):
+    #ephemeris path
+    swe.set_ephe_path(EPHE_PATH)
+
     lat, lon, tz_str = resolve_location(city_name)
     tz = pytz.timezone(tz_str)
     dt = tz.localize(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M"))
