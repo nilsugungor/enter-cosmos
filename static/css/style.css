@@ -59,8 +59,8 @@ form {
 input { 
     font-family: var(--font-main);
     width: 100%; 
-    padding: 12px; 
-    font-size: 16px;
+    padding: 12rem; 
+    font-size: 16rem;
     border: none;
     border-bottom: 1px solid var(--purple-faded) !important;
     background: transparent !important; 
@@ -77,9 +77,6 @@ input::placeholder {
     opacity: 0.7;
 }
 
-input:focus { 
-    border-bottom: 2px solid var(--cosmic-purple) !important; 
-}
 
 .main-btn { 
     cursor: pointer; 
