@@ -1,6 +1,6 @@
 # Enter Cosmos: Personal Astrology Engine
 
-Enter Cosmos is a high-precision and fun astrology engine that generates detailed natal charts and PDF reports using the **Swiss Ephemeris**.
+Enter Cosmos is a high-precision and fun astrology engine that generates detailed natal charts and PDF reports using the **Swiss Ephemeris**. Click on the planets, learn more.
 
 ## Features
 - **Precise Calculations:** Uses the `pyswisseph` library for professional-grade planetary positions.
