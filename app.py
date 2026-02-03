@@ -22,6 +22,10 @@ EPHE_PATH = os.path.join(BASE_DIR, 'ephe')
 #ephemeris path
 swe.set_ephe_path(EPHE_PATH)
 
+print(f"DEBUG: BASE_DIR is {BASE_DIR}")
+print(f"DEBUG: Checking EPHE_PATH: {EPHE_PATH}")
+print(f"DEBUG: Does path exist? {os.path.exists(EPHE_PATH)}")
+
 def load_json(filename):
     full_path = os.path.join(BASE_DIR, filename)
     if os.path.exists(full_path):
