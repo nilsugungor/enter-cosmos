@@ -59,12 +59,12 @@ form {
 input { 
     font-family: var(--font-main);
     width: 100%; 
-    padding: 12rem; 
-    font-size: 16rem;
+    padding: 12px; 
+    font-size: 16px;
     border: none;
     border-bottom: 1px solid var(--purple-faded) !important;
     background: transparent !important; 
-    color: white !important; 
+    color: #ffffff !important; 
     transition: 0.3s;
     border-radius: 0; 
     box-sizing: border-box; 
@@ -77,6 +77,9 @@ input::placeholder {
     opacity: 0.7;
 }
 
+input:focus { 
+    border-bottom: 2px solid var(--cosmic-purple) !important; 
+}
 
 .main-btn { 
     cursor: pointer; 
@@ -97,7 +100,6 @@ input::placeholder {
     background: #1a1a1a; list-style: none; 
     position: absolute; width: 100%; z-index: 2000; padding: 0; margin: 5px 0;
     border-radius: 8px; max-height: 200px; overflow-y: auto; text-align: left;
-    border: 1px solid var(--purple-faded);
 }
 #suggestions li { padding: 12px; cursor: pointer; color: var(--text-main); border-bottom: 1px solid #333; }
 #suggestions li:hover { background: var(--purple-faded); }
@@ -151,6 +153,37 @@ input::placeholder {
 .back-btn { 
     background: none; border: 1px solid var(--cosmic-purple); color: var(--cosmic-purple); 
     padding: 8px 20px; border-radius: 30px; cursor: pointer; margin-bottom: 30px;
+}
+
+
+.flatpickr-calendar {
+    background: #111 !important;
+    border: 1px solid var(--cosmic-purple) !important;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.3) !important;
+}
+
+.flatpickr-month, 
+.flatpickr-weekday, 
+.flatpickr-day,
+.flatpickr-time input, 
+.flatpickr-time .flatpickr-time-separator,
+.flatpickr-am-pm {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+.flatpickr-day.selected {
+    background: var(--cosmic-purple) !important;
+    border-color: var(--cosmic-purple) !important;
+}
+
+.flatpickr-time .numInputWrapper span:after {
+    border-top-color: var(--cosmic-purple) !important;
+    border-bottom-color: var(--cosmic-purple) !important;
+}
+
+.flatpickr-day:hover {
+    background: var(--purple-faded) !important;
 }
 
 @media (max-width: 1024px) { #results { grid-template-columns: repeat(3, 1fr); } }
