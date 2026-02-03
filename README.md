@@ -39,6 +39,7 @@ Enter Cosmos is a high-precision and fun astrology engine that generates detaile
 - sepl_18.se1 (Planetary Data): Contains orbital data for planets from Mercury to Pluto. It is the backbone for calculating planetary degrees and sign placements.
 - semo_18.se1 (Lunar Data): Specifically designed to handle the Moon's complex orbital path. This allows for the precise calculation of the Moon sign and its house placement.
 - sefstars.se1 (Fixed Stars): Includes positional data for major fixed stars. In this project, it is specifically used to calculate the position of Regulus.
+- House System: The engine utilizes the Placidus House System, the most widely used and time-tested method in modern Western astrology. This ensures that the house placements in your report align with professional astrological standards.
 
 ## License
 - This project is for personal use and portfolio purposes. Data from Swiss Ephemeris is subject to their own licensing terms.
