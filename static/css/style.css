@@ -60,7 +60,6 @@ input {
     font-family: var(--font-main);
     width: 100%; padding: 12px; font-size: 14px; 
     border: none;
-    border-bottom: 1px solid var(--purple-faded);
     background: transparent; color: white; transition: 0.3s;
     border-radius: 0; box-sizing: border-box; outline: none;
 }
