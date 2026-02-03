@@ -156,7 +156,7 @@ def export_pdf():
     info_style = ParagraphStyle('InfoStyle', fontSize=11, textColor=colors.HexColor("#d8b2ff"), fontName="Helvetica-Oblique", spaceAfter=20, leading=14)
     body_text = ParagraphStyle('BodyText', fontSize=10, textColor=colors.HexColor("#eeeeee"), leading=16, spaceAfter=12)
 
-    elements = [Paragraph("COSMIC ALGORITHM", title_style)]
+    elements = [Paragraph("ENTER COSMOS", title_style)]
     elements.append(Paragraph(f"REPORT FOR: {user.get('city', '').upper()}", sub_header_style))
     elements.append(Paragraph(f"{user.get('date', '')} | {user.get('time', '')}", sub_header_style))
     elements.append(Spacer(1, 30))
@@ -178,7 +178,7 @@ def export_pdf():
 
     doc.build(elements, onFirstPage=draw_background, onLaterPages=draw_background)
     buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name="Cosmic_Blueprint.pdf", mimetype='application/pdf')
+    return send_file(buffer, as_attachment=True, download_name="enter-cosmos.pdf", mimetype='application/pdf')
 
 if __name__ == "__main__":
     app.run(debug=True)
