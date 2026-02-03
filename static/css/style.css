@@ -1,0 +1,139 @@
+:root {
+    --bg-paper: #f4f1ea;
+    --ink-blue: #1a2a44;
+    --black-black: #000000;
+    --ink-faded: #3d4a5e;
+    --accent-soft: #8a7b6a;
+    --card-bg: rgba(255, 255, 255, 0.5); 
+    --radius-soft: 12px;
+    --font-main: 'Inter', sans-serif;
+    --font-cosmic: 'Cinzel', serif;
+}
+
+body { 
+    font-family: var(--font-main);
+    font-weight: 400;
+    margin: 0; 
+    background: var(--bg-paper);
+    color: var(--ink-blue); 
+    min-height: 100vh;
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+}
+
+#starCanvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.6; }
+
+.container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+
+h1 { 
+    font-family: var(--font-cosmic); 
+    letter-spacing: 6px; 
+    text-transform: uppercase;
+    margin-bottom: 60px; 
+    color: var(--ink-blue);
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.card h2 {
+    font-family: var(--font-cosmic);
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: var(--ink-faded);
+}
+
+form { 
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; 
+    margin-bottom: 50px; background: transparent; padding: 25px;
+}
+
+.input-group { position: relative; flex: 1 1 200px; }
+
+input { 
+    font-family: var(--font-main);
+    width: 100%; padding: 12px; font-size: 14px; 
+    border: none;
+    border-bottom: 1px solid var(--ink-blue);
+    background: transparent; color: var(--ink-blue); transition: 0.3s;
+    border-radius: 0; box-sizing: border-box; outline: none;
+}
+
+.main-btn { 
+    cursor: pointer; 
+    background: var(--black-black); 
+    color: white; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    letter-spacing: 2px;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    transition: 0.3s;
+    box-shadow: 2px 2px 10px rgba(26, 42, 68, 0.2);
+}
+.main-btn:hover { background: var(--ink-faded); transform: translateY(-2px); }
+
+#suggestions { 
+    background: white; list-style: none; 
+    position: absolute; width: 100%; z-index: 2000; padding: 0; margin: 5px 0;
+    border-radius: 8px; max-height: 200px; overflow-y: auto; text-align: left;
+}
+#suggestions li { padding: 12px; cursor: pointer; color: var(--ink-blue); border-bottom: 1px solid #eee; }
+#suggestions li:hover { background: var(--bg-paper); }
+
+#results { 
+    display: grid; 
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 20px; 
+}
+
+.card { 
+    background: var(--card-bg); 
+    border: 1px solid var(--ink-blue); 
+    padding: 25px 15px; cursor: pointer; transition: 0.3s;
+    text-align: center; border-radius: 4px;
+    box-shadow: 4px 4px 0px var(--ink-blue);
+}
+
+.card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--accent-soft); }
+
+.glyph { font-size: 40px; margin-bottom: 10px; display: block; color: var(--ink-blue); opacity: 0.8; }
+
+#pdf-section { display: none; text-align: center; margin-top: 50px; }
+
+.pdf-btn {
+    font-family: var(--font-main);
+    background: transparent;
+    border: 1px solid var(--ink-blue);
+    color: var(--ink-blue);
+    padding: 14px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.pdf-btn:hover { background: var(--ink-blue); color: white; }
+
+#detailView { 
+    display: none; background: var(--bg-paper); border: 2px solid var(--ink-blue);
+    border-radius: var(--radius-soft); padding: 40px; 
+    max-width: 800px; margin: 0 auto;
+    box-shadow: 10px 10px 0px rgba(26, 42, 68, 0.1);
+}
+
+#detailContent h2 { font-family: var(--font-cosmic); font-size: 32px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-blue); }
+#detailContent p { line-height: 1.8; font-size: 16px; color: var(--ink-faded); text-align: left; }
+
+.back-btn { 
+    background: none; border: 1px solid var(--ink-blue); color: var(--ink-blue); 
+    padding: 8px 20px; border-radius: 30px; cursor: pointer; margin-bottom: 30px;
+}
+
+@media (max-width: 1024px) { #results { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { #results { grid-template-columns: repeat(2, 1fr); } }
