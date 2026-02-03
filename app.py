@@ -2,10 +2,10 @@ from flask import Flask, request, jsonify, render_template
 import swisseph as swe
 from datetime import datetime
 import pytz
-from location_utils import resolve_location  # your geocoding helper
+from location_utils import resolve_location
 
 app = Flask(__name__)
-swe.set_ephe_path("./ephe")  # Swiss ephemeris folder
+swe.set_ephe_path("./ephe")
 
 SIGNS = [
     "Aries","Taurus","Gemini","Cancer","Leo","Virgo",
@@ -32,11 +32,18 @@ def zodiac(longitude):
     degree = longitude % 30
     return sign, round(degree, 2)
 
-def house_number_whole_sign(rising_sign, planet_sign):
-    rising_index = SIGNS.index(rising_sign)
-    planet_index = SIGNS.index(planet_sign)
-    house_num = (planet_index - rising_index + 12) % 12 + 1
-    return house_num
+def planet_house_placidus(planet_lon, cusps):
+    for i in range(12):
+        start = cusps[i]
+        end = cusps[(i+1)%12]
+        if start < end:
+            if start <= planet_lon < end:
+                return i + 1
+        else:  # wrap-around at 360°
+            if planet_lon >= start or planet_lon < end:
+                return i + 1
+    return 12
+
 
 def calculate_chart(date_str, time_str, city_name):
     lat, lon, tz_str = resolve_location(city_name)
@@ -45,8 +52,7 @@ def calculate_chart(date_str, time_str, city_name):
     ut = dt.astimezone(pytz.utc)
     jd = swe.julday(ut.year, ut.month, ut.day, ut.hour + ut.minute/60)
 
-    # Houses (cusps still needed for rising degree)
-    houses, ascmc = swe.houses(jd, lat, lon)
+    houses, ascmc = swe.houses(jd, lat, lon, b'P')
     asc = ascmc[0]
     asc_sign, asc_deg = zodiac(asc)
 
@@ -58,17 +64,17 @@ def calculate_chart(date_str, time_str, city_name):
         pos = swe.calc_ut(jd, planet)
         lon_deg = pos[0][0] if isinstance(pos[0], (list, tuple)) else pos[0]
         sign, deg = zodiac(lon_deg)
-        house = house_number_whole_sign(asc_sign, sign)
+        house = planet_house_placidus(lon_deg, houses)
         result[name] = {"sign": sign, "degree": deg, "house": house}
 
     # Regulus
     regulus = swe.fixstar_ut("Regulus", jd)
     lon_regulus = regulus[0] if isinstance(regulus[0], float) else regulus[0][0]
     sign_r, deg_r = zodiac(lon_regulus)
-    house_r = house_number_whole_sign(asc_sign, sign_r)
+    house_r = planet_house_placidus(lon_regulus, houses)
     result["regulus"] = {"sign": sign_r, "degree": deg_r, "house": house_r}
 
-    # Part of Fortune (whole sign)
+    # Part of Fortune (Placidus formula)
     sun_lon = result["sun"]["degree"] + SIGNS.index(result["sun"]["sign"])*30
     moon_lon = result["moon"]["degree"] + SIGNS.index(result["moon"]["sign"])*30
     asc_deg = asc
@@ -77,7 +83,7 @@ def calculate_chart(date_str, time_str, city_name):
     else:
         pof_lon = (asc_deg - moon_lon + sun_lon)%360
     sign_p, deg_p = zodiac(pof_lon)
-    house_p = house_number_whole_sign(asc_sign, sign_p)
+    house_p = planet_house_placidus(pof_lon, houses)
     result["part_of_fortune"] = {"sign": sign_p, "degree": deg_p, "house": house_p}
 
     result["city"] = city_name
