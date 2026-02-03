@@ -188,14 +188,52 @@ input:focus {
 
 @media (max-width: 1024px) { #results { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 600px) {
-    form {
-        flex-direction: column;
-        padding: 10px;
+    .container {
+        padding: 20px 15px;
     }
-    .input-group {
-        width: 100%;
-    }
+
     h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 30px;
+        letter-spacing: 4px;
+    }
+
+    form {
+        padding: 10px 5px;
+        margin-bottom: 30px;
+        gap: 10px;
+    }
+
+    .input-group {
+        margin-bottom: 5px;
+    }
+
+    input {
+        padding: 8px 5px;
+        font-size: 14px !important;
+    }
+
+    .main-btn {
+        padding: 10px 20px;
+        font-size: 12px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    #results {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 15px 10px;
+    }
+
+    .glyph {
+        font-size: 30px;
+    }
+
+    .card h2 {
+        font-size: 11px;
     }
 }
