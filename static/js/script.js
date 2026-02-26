@@ -148,13 +148,13 @@ function showDetail(key) {
     document.getElementById("detailGlyph").innerText = glyphMap[key] || "";
     document.getElementById("detailTitle").innerText = planetName;
     
-    const sText = planetSignText[planetName]?.[obj.sign] || "Reading the patterns...";
+    const sText = planetSignText[planetName]?.[obj.sign] || "";
     const hText = planetHouseText[planetName]?.[obj.house] || "";
-    
+
     document.getElementById("detailBody").innerHTML = `
         <p style="font-size:18px; font-weight:bold; color:var(--ink-blue); text-align:center;">${obj.sign} — ${obj.degree}° — House ${obj.house}</p>
         <hr style="border:0; border-top:1px solid var(--ink-blue); opacity:0.2; margin:30px 0;">
-        <p>${sText}</p><p>${hText}</p>`;
+        ${sText ? `<p>${sText}</p>` : ""}${hText ? `<p>${hText}</p>` : ""}`;
     window.scrollTo(0,0);
 }
 
